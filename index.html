@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SS Farm Fresh Milk</title>
+  <meta name="description" content="Pure, natural, farm-fresh milk delivered daily from Shamirpet to your home." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --brand:#1f7a1f; /* deep green */
+      --brand-2:#7cc27c; /* light green */
+      --milk:#fffefa; /* creamy white */
+      --ink:#0f172a; /* slate-900 */
+      --muted:#475569; /* slate-600 */
+      --card:#ffffff;
+      --ring:#9ae69a;
+      --accent:#f2fce2;
+    }
+{
+  text-align: justify;
+  text-justify: inter-word;
+}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
+      color:var(--ink);
+      background: var(--milk);
+      overflow-x:hidden;
+    }
+
+    /* --- VILLAGE ILLUSTRATION BACKDROP (pure CSS + inline SVG) --- */
+    .village-bg{
+      position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.25;
+      background:
+        radial-gradient(1200px 600px at 70% 110%, #a3e7a3 0%, transparent 60%),
+        radial-gradient(900px 500px at 10% 100%, #c7f7c7 0%, transparent 60%),
+        linear-gradient(180deg, #eaffea 0%, #ffffff 40%);
+    }
+    .village-svg{position:absolute; inset:auto 0 0 0; width:100%; height:auto}
+
+    /* --- LAYOUT --- */
+    .container{width:min(1200px, 92vw); margin-inline:auto}
+    header{
+      position:sticky; top:0; z-index:20; backdrop-filter:saturate(120%) blur(8px);
+      background:rgba(255,255,255,.75); border-bottom:1px solid #e6f5e6;
+    }
+    nav{display:flex; align-items:center; justify-content:space-between; gap:16px; padding:12px 0}
+    .brand{display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.2px}
+    .brand .leaf{width:36px; height:36px; border-radius:12px; background:conic-gradient(from 180deg at 50% 50%, var(--brand), var(--brand-2)); display:grid; place-items:center; color:white; font-weight:900}
+    .brand span{font-size:clamp(18px, 2.2vw, 22px)}
+
+    .btn{appearance:none; border:0; background:var(--brand); color:white; padding:.9rem 1.2rem; border-radius:999px; font-weight:700; cursor:pointer; transition:.2s transform, .2s box-shadow; box-shadow:0 6px 18px rgba(31,122,31,.18)}
+    .btn:hover{transform:translateY(-1px)}
+    .btn:active{transform:translateY(0)}
+    .btn.outline{background:#ffffff; color:var(--brand); border:2px solid var(--brand); box-shadow:none}
+
+    .hero{display:grid; grid-template-columns:1.2fr 1fr; gap:28px; align-items:center; padding:32px 0 24px}
+    .hero h1{font-size:clamp(28px, 5vw, 48px); line-height:1.1; margin:0 0 12px}
+    .hero p{font-size:clamp(14px, 2.2vw, 18px); color:var(--muted); margin:0 0 20px}
+    .hero-card{background:var(--card); border:1px solid #e6f5e6; border-radius:20px; padding:18px; box-shadow:0 20px 60px rgba(31,122,31,.07)}
+
+    .pillbar{display:flex; gap:10px; flex-wrap:wrap; margin:12px 0 18px}
+    .pill{background:#f0fff0; border:1px solid #d5f2d5; padding:8px 12px; border-radius:999px; font-weight:600; font-size:13px}
+
+    .grid3{display:grid; grid-template-columns:repeat(3, 1fr); gap:16px}
+    .card{background:var(--card); border:1px solid #e6f5e6; border-radius:18px; padding:16px; box-shadow:0 10px 30px rgba(31,122,31,.06)}
+    .card h3{margin:0 0 6px; font-size:18px}
+    .card p{margin:0; color:var(--muted); font-size:14px}
+
+    .contact{display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:start; padding:28px 0}
+
+    form{display:grid; gap:12px}
+    .field{display:grid; gap:6px}
+    label{font-size:14px; font-weight:700}
+    input, select, textarea{
+      width:100%; padding:12px 14px; border-radius:12px;
+      border:1.5px solid #d7efda; background:#fcfffc; font:inherit; outline:none;
+    }
+    input:focus, select:focus, textarea:focus{border-color:var(--ring); box-shadow:0 0 0 4px rgba(154,230,154,.25)}
+    .help{font-size:12px; color:var(--muted)}
+    .error{color:#b91c1c; font-size:12px}
+
+    footer{margin:28px 0 48px; color:var(--muted); font-size:14px}
+
+    /* ADMIN PANEL */
+    .admin-entry{display:flex; align-items:center; gap:10px}
+    .admin-entry a{font-weight:700; text-decoration:none; color:var(--brand)}
+
+    .admin-modal{position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(15,23,42,.45); padding:24px}
+    .admin-box{width:min(920px, 96vw); background:#ffffff; border-radius:20px; box-shadow:0 30px 80px rgba(0,0,0,.25); display:grid; grid-template-columns:280px 1fr; min-height:520px}
+    .admin-side{background:linear-gradient(160deg, var(--brand), var(--brand-2)); color:white; border-radius:20px 0 0 20px; padding:22px; display:grid; align-content:start; gap:10px}
+    .admin-main{padding:18px 18px 28px 18px}
+    .admin-logo{display:flex; align-items:center; gap:10px; font-weight:900}
+    .admin-logo .leaf{width:32px; height:32px; border-radius:10px; background:conic-gradient(from 180deg, #fff, #b5efb5)}
+    .admin-nav{display:grid; gap:6px; margin-top:12px}
+    .admin-nav button{background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.35); color:white; padding:10px 12px; border-radius:10px; cursor:pointer; text-align:left; font-weight:700}
+    .admin-nav button.active{background:white; color:var(--brand)}
+
+    .admin-login{display:grid; gap:12px; padding:18px}
+
+    .stats{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:6px 0 16px}
+    .stat{background:#f6fff6; border:1px solid #e1f6e1; padding:14px; border-radius:14px}
+    .stat strong{font-size:28px}
+
+    .cms-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+
+    .admin-top{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:8px 0 12px}
+
+    .close-admin{background:#fff; border:1px solid #dfeee0; border-radius:999px; padding:8px 12px; font-weight:700; cursor:pointer}
+
+    /* RESPONSIVE */
+    @media (max-width: 980px){
+      .hero{grid-template-columns:1fr;}
+      .contact{grid-template-columns:1fr}
+      .grid3{grid-template-columns:1fr}
+      .admin-box{grid-template-columns:1fr}
+      .admin-side{border-radius:20px 20px 0 0}
+      header nav{padding-inline:8px}
+    }
+  </style>
+</head>
+<body>
+  <!-- Decorative village background -->
+  <div class="village-bg" aria-hidden="true">
+    <!-- simple village skyline using inline SVG -->
+    <svg class="village-svg" viewBox="0 0 1440 260" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="hill" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" stop-color="#97e097"/>
+          <stop offset="100%" stop-color="#eaffea"/>
+        </linearGradient>
+      </defs>
+      <path d="M0,220 C180,160 300,180 420,200 C540,220 660,150 780,190 C900,230 1080,180 1440,220 L1440,260 L0,260Z" fill="url(#hill)"/>
+      <g fill="#7cc27c">
+        <rect x="180" y="170" width="44" height="28" rx="4"/>
+        <rect x="196" y="152" width="12" height="18"/>
+        <rect x="210" y="160" width="10" height="10"/>
+        <rect x="900" y="168" width="50" height="30" rx="4"/>
+        <rect x="918" y="148" width="14" height="20"/>
+        <circle cx="310" cy="175" r="12"/>
+        <rect x="300" y="178" width="20" height="20" rx="4"/>
+      </g>
+      <g stroke="#5aa85a" stroke-width="4" stroke-linecap="round">
+        <line x1="80" y1="190" x2="100" y2="180"/>
+        <line x1="100" y1="180" x2="120" y2="190"/>
+        <line x1="120" y1="190" x2="140" y2="180"/>
+      </g>
+    </svg>
+  </div>
+
+  <header>
+    <div class="container">
+      <nav>
+        <div class="brand" id="brandName"><div class="leaf">🍃</div><span>SS Farm Fresh Milk</span></div>
+        <div style="display:flex; gap:10px; align-items:center">
+          <button class="btn outline" id="adminOpenBtn" title="Admin Panel">Admin</button>
+          <a class="btn" id="orderNowTop">Order Now</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <h1 id="heroTitle">🌿 Farm Fresh Milk <br> Pure. Natural. Healthy. 🥛</h1>
+        <p id="heroSubtitle">Direct from our farm in <strong>Shamirpet</strong> to your home. No mixing, no chemicals — just authentic taste and nutrition.</p>
+        <div class="pillbar" id="whyPills">
+          <span class="pill">✅ 100% Pure & Natural</span>
+          <span class="pill">✅ Freshly milked daily</span>
+          <span class="pill">✅ Farm-to-Home Supply</span>
+          <span class="pill">✅ Safe for kids & families</span>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap">
+          <a class="btn" id="orderNowHero">Order Now on WhatsApp</a>
+          <a class="btn outline" href="#contact">Have Questions?</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <img src="data:image/svg+xml;utf8,<?xml version='1.0' encoding='UTF-8'?><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 480 320'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%' stop-color='%23f5fff5'/><stop offset='100%' stop-color='%23e3ffe3'/></linearGradient></defs><rect width='100%' height='100%' fill='url(%23g)'/><g fill='none' stroke='%2380c980' stroke-width='6'><rect x='120' y='40' rx='18' width='180' height='240'/><circle cx='330' cy='140' r='40'/><path d='M150 166 c30 -10 120 -10 150 0' stroke-linecap='round'/></g><text x='240' y='300' text-anchor='middle' fill='%235a8f5a' font-family='Arial' font-size='18'>Pure Cow Milk · 100% Natural</text></svg>" alt="Fresh milk illustration" style="width:100%; border-radius:16px; border:1px solid #e6f5e6"/>
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:12px">
+          <div class="card"><h3>₹ Price</h3><p><span id="pricePerL">₹ 90</span> / litre (intro)</p></div>
+          <div class="card"><h3>Timing</h3><p id="deliveryTiming">Daily delivery 5–8 AM</p></div>
+          <div class="card"><h3>Area</h3><p id="serviceArea">Medipally & Nearby</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="grid3">
+        <div class="card">
+          <h3>Our Story 💡</h3>
+          <p style="text-align: justify;"> <h4>Our Story As a father of two young kids, I realized the struggle of finding pure milk in our area. To ensure my children get the best, I started sourcing directly from our own farm in Shamirpet.<br> <br>Seeing many neighbours and friends facing the same issue, we decided to share this farm-fresh, unadulterated milk with families in our community.</h4></p>
+        </div>
+        <div class="card">
+          <h3>Quality Promise</h3>
+          <p>No mixing, no preservatives — just hygienically handled milk straight from our cows to your home.</p>
+        </div>
+        <div class="card">
+          <h3>Contact</h3>
+          <p>
+            📍 <span id="farmName">Shamirpet Farm Fresh Milk</span><br/>
+            📲 <a id="phonePrimary" href="tel:+917382601453">+91 73826 01453</a>, <a id="phoneSecondary" href="tel:+918333977567">+91 83339 77567</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="contact">
+      <div>
+        <h2>Place an enquiry</h2>
+        <p class="help">We’ll confirm on WhatsApp right away.</p>
+        <form id="enquiryForm" novalidate>
+          <div class="field">
+            <label for="name">Full Name</label>
+            <input id="name" name="name" placeholder="Your name" required />
+            <div class="error" data-err-for="name"></div>
+          </div>
+          <div class="field">
+            <label for="phone">Mobile Number (WhatsApp)</label>
+            <input id="phone" name="phone" inputmode="numeric" placeholder="10-digit mobile" required />
+            <div class="error" data-err-for="phone"></div>
+          </div>
+          <div class="field">
+            <label for="address">Address / Landmark</label>
+            <textarea id="address" name="address" rows="3" placeholder="House no., Street, Area, Landmark" required></textarea>
+            <div class="error" data-err-for="address"></div>
+          </div>
+          <div class="field">
+            <label for="quantity">Quantity (Litres)</label>
+            <select id="quantity" name="quantity" required>
+              <option value="">Select</option>
+              <option>0.5</option>
+              <option>1</option>
+              <option>1.5</option>
+              <option>2</option>
+              <option>3</option>
+              <option>5</option>
+            </select>
+            <div class="error" data-err-for="quantity"></div>
+          </div>
+          <div class="field">
+            <label for="frequency">Frequency</label>
+            <select id="frequency" name="frequency" required>
+              <option value="">Select</option>
+              <option>Daily</option>
+              <option>Alternate Days</option>
+              <option>Weekends</option>
+              <option>Trial (3 days)</option>
+            </select>
+            <div class="error" data-err-for="frequency"></div>
+          </div>
+          <div class="field">
+            <label for="time">Preferred Delivery Time</label>
+            <select id="time" name="time" required>
+              <option value="">Select</option>
+              <option>5:00–6:00 AM</option>
+              <option>6:00–7:00 AM</option>
+              <option>7:00–8:00 AM</option>
+            </select>
+            <div class="error" data-err-for="time"></div>
+          </div>
+          <div class="field">
+            <label for="notes">Notes (optional)</label>
+            <input id="notes" name="notes" placeholder="E.g., gate code, leave at doorstep" />
+          </div>
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+            <button class="btn" type="submit" id="sendMessageBtn">Send Message</button>
+            <a class="btn outline" id="orderNowBottom">Order Now</a>
+          </div>
+        </form>
+      </div>
+      <div>
+        <div class="card">
+          <h3>How delivery works</h3>
+          <p>Fresh milk is collected at dawn, quickly chilled, and packed hygienically. Our riders deliver within 5–8 AM to ensure peak freshness.</p>
+        </div>
+        <div class="card" style="margin-top:12px">
+          <h3>Need help?</h3>
+          <p>Ping us on WhatsApp or call. We’re happy to set up a 3‑day trial.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      © <span id="year"></span> <span id="footerName">Shamirpet Farm Fresh Milk</span>. Pure • Natural • Healthy.
+    </footer>
+  </main>
+
+  <!-- Floating WhatsApp button -->
+  <a id="whatsFloat" title="Chat on WhatsApp" aria-label="WhatsApp" style="position:fixed; right:16px; bottom:16px; background:#25D366; color:white; width:56px; height:56px; border-radius:50%; display:grid; place-items:center; font-size:26px; text-decoration:none; box-shadow:0 12px 28px rgba(0,0,0,.18)">✳️</a>
+
+  <!-- ADMIN PANEL MODAL -->
+  <div class="admin-modal" id="adminModal" aria-hidden="true">
+    <div class="admin-box" role="dialog" aria-modal="true" aria-labelledby="adminTitle">
+      <div class="admin-side">
+        <div class="admin-logo"><div class="leaf"></div> <div>SS Farm Admin</div></div>
+        <div class="admin-entry">
+          <div>🔑</div>
+          <div>
+            <div><strong>Login</strong></div>
+            
+          </div>
+        </div>
+        <div style="margin-top:14px; font-size:13px; opacity:.95">Tip: Your edits save to this browser and update the live site content immediately.</div>
+      </div>
+      <div class="admin-main">
+        <div class="admin-top">
+          <h3 id="adminTitle" style="margin:0">Dashboard</h3>
+          <div style="display:flex; gap:10px">
+            <button class="btn outline" id="logoutBtn">Logout</button>
+            <button class="close-admin" id="adminClose">Close</button>
+          </div>
+        </div>
+
+        <div id="adminLogin" class="admin-login">
+          <div class="field">
+            <label for="admUser">Username</label>
+            <input id="admUser" placeholder="admin"/>
+          </div>
+          <div class="field">
+            <label for="admPass">Password</label>
+            <input id="admPass" type="password" placeholder="••••••••"/>
+          </div>
+          <button class="btn" id="admSignIn">Sign In</button>
+          <div class="error" id="admError"></div>
+        </div>
+
+        <div id="adminTabs" style="display:none">
+          <div class="admin-nav">
+            <button data-tab="dash" class="active">📊 Overview</button>
+            <button data-tab="cms">📝 CMS Content</button>
+            <button data-tab="settings">⚙️ Settings</button>
+          </div>
+
+          <div id="tab-dash" style="margin-top:12px">
+            <div class="stats">
+              <div class="stat"><div>Today Enquiries</div><strong id="statToday">0</strong></div>
+              <div class="stat"><div>Total Enquiries</div><strong id="statTotal">0</strong></div>
+              <div class="stat"><div>Conversion Link Clicks</div><strong id="statClicks">0</strong></div>
+            </div>
+            <div class="card">
+              <h3 style="margin-top:0">Recent Enquiries</h3>
+              <div id="recentList" class="help">No enquiries yet.</div>
+            </div>
+          </div>
+
+          <div id="tab-cms" style="display:none; margin-top:12px">
+            <div class="cms-grid">
+              <div class="card">
+                <h3>Hero Section</h3>
+                <div class="field"><label>Title</label><input id="cmsHeroTitle"/></div>
+                <div class="field"><label>Subtitle</label><textarea id="cmsHeroSubtitle" rows="3"></textarea></div>
+                <div class="field"><label>Pills (comma separated)</label><input id="cmsPills"/></div>
+              </div>
+              <div class="card">
+                <h3>Basics</h3>
+                <div class="field"><label>Farm Name</label><input id="cmsFarmName"/></div>
+                <div class="field"><label>Primary Phone (+91)</label><input id="cmsPhone1"/></div>
+                <div class="field"><label>Secondary Phone (+91)</label><input id="cmsPhone2"/></div>
+                <div class="field"><label>Price per Litre (₹)</label><input id="cmsPrice" type="number" step="1"/></div>
+                <div class="field"><label>Delivery Timing</label><input id="cmsTiming"/></div>
+                <div class="field"><label>Service Area</label><input id="cmsArea"/></div>
+              </div>
+              <div class="card" style="grid-column:1/-1">
+                <h3>Story</h3>
+                <div class="field"><label>Our Story</label><textarea id="cmsStory" rows="4"></textarea></div>
+              </div>
+            </div>
+            <div style="margin-top:12px; display:flex; gap:10px">
+              <button class="btn" id="cmsSave">Save Changes</button>
+              <button class="btn outline" id="cmsReset">Reset to Default</button>
+            </div>
+          </div>
+
+          <div id="tab-settings" style="display:none; margin-top:12px">
+            <div class="card">
+              <h3>Appearance</h3>
+              <div class="field"><label>Theme Accent</label>
+                <select id="themeSelect">
+                  <option value="green">Green (Default)</option>
+                  <option value="blue">Blue</option>
+                  <option value="amber">Amber</option>
+                </select>
+              </div>
+              <div class="help">Switch accent color to match your branding.</div>
+            </div>
+            <div class="card" style="margin-top:12px">
+              <h3>Data</h3>
+              <button class="btn outline" id="exportData">Export Enquiries (JSON)</button>
+              <button class="btn outline" id="clearData">Clear All Local Data</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---------- Helpers ----------
+    const qs = (s, el=document) => el.querySelector(s);
+    const qsa = (s, el=document) => Array.from(el.querySelectorAll(s));
+
+    const WA_NUMBER = '917382601453'; // +91 7382601453
+
+    function waLink(message='Hi! I want to order farm-fresh milk.'){
+      return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;
+    }
+
+    function openWA(message){
+      const url = waLink(message);
+      window.open(url, '_blank');
+      // track clicks
+      const k='ss_clicks';
+      const clicks = Number(localStorage.getItem(k)||0) + 1;
+      localStorage.setItem(k, clicks);
+      updateStats();
+    }
+
+    function saveEnquiry(payload){
+      const key='ss_enquiries';
+      const arr = JSON.parse(localStorage.getItem(key)||'[]');
+      arr.unshift(payload);
+      localStorage.setItem(key, JSON.stringify(arr));
+      updateStats();
+    }
+
+    function todayStr(){
+      const d=new Date();
+      return d.toISOString().slice(0,10);
+    }
+
+    function updateStats(){
+      const arr = JSON.parse(localStorage.getItem('ss_enquiries')||'[]');
+      const today = todayStr();
+      const todayCount = arr.filter(x=>x.date.startsWith(today)).length;
+      qs('#statToday').textContent = todayCount;
+      qs('#statTotal').textContent = arr.length;
+      qs('#statClicks').textContent = localStorage.getItem('ss_clicks')||'0';
+
+      const list = arr.slice(0,6).map(x => `• ${x.name} (${x.phone}) — ${x.quantity}L ${x.frequency} @ ${x.time} — ${x.area}`).join('\\n');
+      qs('#recentList').textContent = list || 'No enquiries yet.';
+    }
+
+    function loadCMS(){
+      const cfg = JSON.parse(localStorage.getItem('ss_cms')||'null');
+      if(!cfg) return;
+      // apply to page
+      if(cfg.heroTitle) qs('#heroTitle').textContent = cfg.heroTitle;
+      if(cfg.heroSubtitle) qs('#heroSubtitle').textContent = cfg.heroSubtitle;
+      if(cfg.pills){
+        const wrap = qs('#whyPills');
+        wrap.innerHTML = '';
+        cfg.pills.split(',').map(s=>s.trim()).filter(Boolean).forEach(txt=>{
+          const span = document.createElement('span');
+          span.className='pill'; span.textContent=txt; wrap.appendChild(span);
+        })
+      }
+      if(cfg.farmName){ qs('#farmName').textContent = cfg.farmName; qs('#footerName').textContent = cfg.farmName; }
+      if(cfg.phone1){ qs('#phonePrimary').textContent = cfg.phone1; qs('#phonePrimary').href = `tel:+91${cfg.phone1.replace(/\D/g,'')}`; }
+      if(cfg.phone2){ qs('#phoneSecondary').textContent = cfg.phone2; qs('#phoneSecondary').href = `tel:+91${cfg.phone2.replace(/\D/g,'')}`; }
+      if(cfg.price){ qs('#pricePerL').textContent = `₹ ${cfg.price}`; }
+      if(cfg.timing){ qs('#deliveryTiming').textContent = cfg.timing; }
+      if(cfg.area){ qs('#serviceArea').textContent = cfg.area; }
+      if(cfg.story){ qs('#ourStory').textContent = cfg.story; }
+
+      // theme
+      if(cfg.theme){ setTheme(cfg.theme); qs('#themeSelect').value = cfg.theme; }
+    }
+
+    function setTheme(name){
+      const root = document.documentElement;
+      if(name==='blue'){
+        root.style.setProperty('--brand', '#145c9e');
+        root.style.setProperty('--brand-2', '#78b9ff');
+        root.style.setProperty('--ring', '#9ec9ff');
+        root.style.setProperty('--accent', '#e7f1ff');
+      } else if(name==='amber'){
+        root.style.setProperty('--brand', '#b45309');
+        root.style.setProperty('--brand-2', '#fbbf24');
+        root.style.setProperty('--ring', '#f8d07a');
+        root.style.setProperty('--accent', '#fff6db');
+      } else {
+        root.style.setProperty('--brand', '#1f7a1f');
+        root.style.setProperty('--brand-2', '#7cc27c');
+        root.style.setProperty('--ring', '#9ae69a');
+        root.style.setProperty('--accent', '#f2fce2');
+      }
+    }
+
+    // ---------- WhatsApp buttons ----------
+    ['orderNowTop','orderNowHero','orderNowBottom','whatsFloat'].forEach(id=>{
+      qs('#'+id).addEventListener('click', ()=> openWA('Hi! I want to order farm-fresh milk. Please help me with subscription.'))
+    });
+
+    // ---------- Form validation + Send on WhatsApp ----------
+    qs('#enquiryForm').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      // clear errors
+      qsa('.error[data-err-for]').forEach(el=> el.textContent='');
+
+      const name = qs('#name').value.trim();
+      const phone = qs('#phone').value.replace(/\D/g,'');
+      const address = qs('#address').value.trim();
+      const quantity = qs('#quantity').value;
+      const frequency = qs('#frequency').value;
+      const time = qs('#time').value;
+      const notes = qs('#notes').value.trim();
+
+      let valid = true;
+      if(name.length < 2){ valid=false; qs('[data-err-for="name"]').textContent='Please enter your full name.'; }
+      if(!/^([6-9][0-9]{9})$/.test(phone)){ valid=false; qs('[data-err-for="phone"]').textContent='Enter a valid 10-digit Indian mobile starting with 6-9.'; }
+      if(address.length < 8){ valid=false; qs('[data-err-for="address"]').textContent='Please add full address / landmark.'; }
+      if(!quantity){ valid=false; qs('[data-err-for="quantity"]').textContent='Select a quantity.'; }
+      if(!frequency){ valid=false; qs('[data-err-for="frequency"]').textContent='Select frequency.'; }
+      if(!time){ valid=false; qs('[data-err-for="time"]').textContent='Select preferred time.'; }
+
+      if(!valid) return;
+
+      const payload = {
+        date: new Date().toISOString(),
+        name, phone: '+91 ' + phone.replace(/(\d{5})(\d{5})/,'$1 $2'),
+        address, quantity, frequency, time, notes,
+        area: (address.split(',')[1]||address).trim().slice(0,40)
+      };
+      saveEnquiry(payload);
+
+      const message = `New milk enquiry:%0A%0A`+
+        `Name: ${name}%0A`+
+        `Phone: +91 ${phone}%0A`+
+        `Address: ${encodeURIComponent(address)}%0A`+
+        `Qty: ${quantity} L%0A`+
+        `Frequency: ${frequency}%0A`+
+        `Preferred Time: ${time}%0A`+
+        (notes?`Notes: ${encodeURIComponent(notes)}%0A`:``)+
+        `%0APlease guide me with next steps.`;
+
+      openWA(decodeURIComponent(message));
+      e.target.reset();
+    });
+
+    // ---------- Admin modal ----------
+    const modal = qs('#adminModal');
+    qs('#adminOpenBtn').addEventListener('click', ()=>{ modal.style.display='flex'; updateStats(); loadCMS(); });
+    qs('#adminClose').addEventListener('click', ()=>{ modal.style.display='none'; });
+
+    qs('#admSignIn').addEventListener('click', ()=>{
+      const u = qs('#admUser').value.trim();
+      const p = qs('#admPass').value;
+      if(u==='admin' && p==='ssfarm2025'){
+        qs('#adminLogin').style.display='none';
+        qs('#adminTabs').style.display='block';
+        updateStats();
+        // preload CMS fields from current content or saved config
+        const cfg = JSON.parse(localStorage.getItem('ss_cms')||'{}');
+        qs('#cmsHeroTitle').value = cfg.heroTitle || qs('#heroTitle').textContent;
+        qs('#cmsHeroSubtitle').value = cfg.heroSubtitle || qs('#heroSubtitle').textContent;
+        qs('#cmsPills').value = cfg.pills || qsa('#whyPills .pill').map(p=>p.textContent).join(', ');
+        qs('#cmsFarmName').value = cfg.farmName || qs('#farmName').textContent;
+        qs('#cmsPhone1').value = cfg.phone1 || qs('#phonePrimary').textContent.replace(/\D/g,'').slice(-10);
+        qs('#cmsPhone2').value = cfg.phone2 || qs('#phoneSecondary').textContent.replace(/\D/g,'').slice(-10);
+        qs('#cmsPrice').value = cfg.price || qs('#pricePerL').textContent.replace(/\D/g,'');
+        qs('#cmsTiming').value = cfg.timing || qs('#deliveryTiming').textContent;
+        qs('#cmsArea').value = cfg.area || qs('#serviceArea').textContent;
+        qs('#cmsStory').value = cfg.story || qs('#ourStory').textContent;
+      } else {
+        qs('#admError').textContent = 'Invalid credentials';
+      }
+    });
+
+    // tab switching
+    qsa('.admin-nav button').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        qsa('.admin-nav button').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        const t = btn.dataset.tab;
+        qs('#tab-dash').style.display = (t==='dash')? 'block':'none';
+        qs('#tab-cms').style.display = (t==='cms')? 'block':'none';
+        qs('#tab-settings').style.display = (t==='settings')? 'block':'none';
+      })
+    })
+
+    // CMS save/reset
+    qs('#cmsSave').addEventListener('click', ()=>{
+      const cfg = {
+        heroTitle: qs('#cmsHeroTitle').value.trim(),
+        heroSubtitle: qs('#cmsHeroSubtitle').value.trim(),
+        pills: qs('#cmsPills').value.trim(),
+        farmName: qs('#cmsFarmName').value.trim(),
+        phone1: qs('#cmsPhone1').value.replace(/\D/g,''),
+        phone2: qs('#cmsPhone2').value.replace(/\D/g,''),
+        price: qs('#cmsPrice').value.trim(),
+        timing: qs('#cmsTiming').value.trim(),
+        area: qs('#cmsArea').value.trim(),
+        story: qs('#cmsStory').value.trim(),
+        theme: qs('#themeSelect').value
+      };
+      localStorage.setItem('ss_cms', JSON.stringify(cfg));
+      loadCMS();
+      alert('Saved! Site updated.');
+    });
+
+    qs('#cmsReset').addEventListener('click', ()=>{
+      if(confirm('Reset site content to default?')){
+        localStorage.removeItem('ss_cms');
+        loadCMS();
+        alert('Reset complete.');
+      }
+    });
+
+    // Settings
+    qs('#themeSelect').addEventListener('change', (e)=>{ setTheme(e.target.value); })
+
+    // Data export/clear
+    qs('#exportData').addEventListener('click', ()=>{
+      const data = {
+        enquiries: JSON.parse(localStorage.getItem('ss_enquiries')||'[]'),
+        clicks: Number(localStorage.getItem('ss_clicks')||0),
+        cms: JSON.parse(localStorage.getItem('ss_cms')||'{}')
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download='ssfarm-data.json'; a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    qs('#clearData').addEventListener('click', ()=>{
+      if(confirm('This will clear enquiries, clicks, and CMS settings saved in this browser. Continue?')){
+        ['ss_enquiries','ss_clicks','ss_cms'].forEach(k=>localStorage.removeItem(k));
+        updateStats();
+        alert('All local data cleared.');
+      }
+    });
+
+
+    // ---------- Admin Logout ----------
+    qs('#logoutBtn').addEventListener('click', () => {
+      // Hide admin tabs and show login form again
+      qs('#adminTabs').style.display = 'none';
+      qs('#adminLogin').style.display = 'grid';
+      qs('#admUser').value = '';
+      qs('#admPass').value = '';
+      qs('#admError').textContent = '';
+
+      // Close admin modal
+      modal.style.display = 'none';
+
+      // Redirect to home page
+      window.location.href = '/';
+    });
+
+    // Footer year & initial CMS/theme
+    qs('#year').textContent = new Date().getFullYear();
+    loadCMS();
+    updateStats();
+  </script>
+</body>
+</html>
